@@ -12,7 +12,8 @@ public class Basket {
     @GeneratedValue
     private Long id;
 
-    @OneToMany(cascade= CascadeType.ALL, mappedBy = "basket")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "basket")
+    // without mappedBy, creates a separate join table
     private Set<BasketItem> basketItems; // IF basketItems is present, need @OneToMany
 
     private LocalDateTime dateTime;
