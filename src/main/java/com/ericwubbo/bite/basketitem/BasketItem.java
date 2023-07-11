@@ -35,4 +35,21 @@ public class BasketItem {
     public int getCount() {
         return count;
     }
+
+    // needed to read data from a RequestBody
+    public Long getId() {
+        return id;
+    }
+
+    public void setBasket(Basket basket) {
+        this.basket = basket;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
