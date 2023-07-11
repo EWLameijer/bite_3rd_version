@@ -4,6 +4,7 @@ import com.ericwubbo.bite.basketitem.BasketItem;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -12,7 +13,7 @@ public class Basket {
     @GeneratedValue
     private Long id;
 
-    @OneToMany(cascade= CascadeType.ALL, mappedBy = "basket")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "basket")
     private Set<BasketItem> basketItems; // IF basketItems is present, need @OneToMany
 
     private LocalDateTime dateTime;
@@ -26,11 +27,16 @@ public class Basket {
     }
 
     public Set<BasketItem> getBasketItems() {
-        return basketItems;
+        return new HashSet(basketItems);
     }
 
     public LocalDateTime getDateTime() {
         return dateTime;
+    }
+
+    // for persistence
+    public void removeBasketItems() {
+        basketItems.clear();
     }
 
     // should at one point also get user.
