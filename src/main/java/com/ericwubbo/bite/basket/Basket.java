@@ -4,6 +4,7 @@ import com.ericwubbo.bite.basketitem.BasketItem;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -14,7 +15,9 @@ public class Basket {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "basket")
     // without mappedBy, creates a separate join table
-    private Set<BasketItem> basketItems; // IF basketItems is present, need @OneToMany
+    // IF basketItems is present, need @OneToMany
+    // new HashSet if I create a Basket myself (based on, for example, a DTO)
+    private Set<BasketItem> basketItems = new HashSet<>();
 
     private LocalDateTime dateTime;
 
@@ -32,6 +35,10 @@ public class Basket {
 
     public LocalDateTime getDateTime() {
         return dateTime;
+    }
+
+    public void addBasketItem(BasketItem basketItem) {
+        basketItems.add(basketItem);
     }
 
     // should at one point also get user.
