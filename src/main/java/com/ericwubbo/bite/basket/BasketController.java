@@ -29,34 +29,23 @@ public class BasketController {
         return basketRepository.findByDateTimeIsAfter(LocalDateTime.now().minusDays(1));
     }
 
-    @PostMapping
-    public Basket post(@RequestBody Basket basket) {
-        // detached entity passed to persist: com.ericwubbo.bite.basketitem.BasketItem:
-        // so need to first get basketItemdata from basket, replacing by nulls, save the remaining basket,
-        // then create the items with the basket link,
-        // approach 1: works! (though a bit finicky)
-        var basketItems = basket.getBasketItems();
-        basket.removeBasketItems();
-        var savedBasket = basketRepository.save(basket);
-        for( BasketItem basketItem: basketItems) {
-            basketItem.setBasket(savedBasket);
-            Item item = itemRepository.findById(basketItem.getId()).orElseThrow();
-            basketItem.setItem(item);
-            // need to remove ID? No, I don't... Yes, I do!, else in next save it erroneously overwrites the old element with the given ID...
-            basketItem.setId(null);
-            basketItemRepository.save(basketItem);
-        }
-        // Can I achieve the same through linking the basketItems directly?
-        // no: detached entity passed to persist: com.ericwubbo.bite.basketitem.BasketItem
-//        var basketItems = basket.getBasketItems();
-//        for (BasketItem basketItem : basketItems) {
-//            basketItem.setBasket(basket);
-//            Item item = itemRepository.findById(basketItem.getId()).orElseThrow();
-//            basketItem.setItem(item);
-//            // need to remove ID? No, I don't...
-//        }
+    record BasketItemDto(long itemId, int count) {
+    }
 
-        return savedBasket;
+    record BasketDto(BasketItemDto[] basketItems) {
+    }
+
+    @PostMapping
+    public Basket post(@RequestBody BasketDto basketDto) {
+        var basket = basketRepository.save(new Basket());
+        // should likely do a precheck that all ids exist and all counts > 0
+        for (BasketItemDto basketItemDto : basketDto.basketItems()) {
+            Item item = itemRepository.findById(basketItemDto.itemId).orElseThrow();
+            BasketItem basketItem = new BasketItem(item, basket, basketItemDto.count);
+            basketItemRepository.save(basketItem);
+            basket.addBasketItem(basketItem);
+        }
+        return basket;
     }
 
 }

@@ -14,7 +14,9 @@ public class Basket {
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "basket")
-    private Set<BasketItem> basketItems; // IF basketItems is present, need @OneToMany
+    // IF basketItems is present, need @OneToMany
+    // new HashSet<> necessary if I create a basket
+    private Set<BasketItem> basketItems = new HashSet<>();
 
     private LocalDateTime dateTime;
 
@@ -37,6 +39,10 @@ public class Basket {
     // for persistence
     public void removeBasketItems() {
         basketItems.clear();
+    }
+
+    public void addBasketItem(BasketItem basketItem) {
+        basketItems.add(basketItem);
     }
 
     // should at one point also get user.
