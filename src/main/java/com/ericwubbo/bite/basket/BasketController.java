@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @RestController
+@CrossOrigin
 @RequestMapping("api/v1/baskets")
 public class BasketController {
 

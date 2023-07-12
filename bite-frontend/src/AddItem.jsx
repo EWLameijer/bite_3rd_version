@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { post} from './itemServices';
+import { post } from './itemService';
 import PropTypes from 'prop-types';
 
 const AddItem = props => {

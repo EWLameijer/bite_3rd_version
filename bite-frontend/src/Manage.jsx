@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { deleteById, get } from './itemServices';
+import { deleteItemById, getItems } from './itemService';
 import AddItem from './AddItem';
 import { formatAsPrice, toInternalCentPrices } from './utils';
 import { Link } from 'react-router-dom'
@@ -10,10 +10,10 @@ const Manage = () => {
 
     const reloadItems = () => updateVersionGuid(versionGuid + 1)
 
-    const deleteItem = id => deleteById(id).then(reloadItems);
+    const deleteItem = id => deleteItemById(id).then(reloadItems);
 
     useEffect(() => {
-        get().then(response => response.json())
+        getItems().then(response => response.json())
             .then(actualData => setItems(toInternalCentPrices(actualData)))
             .catch(err => console.log(`An error has occurred: ${err.message}.`))
     }, [versionGuid]);

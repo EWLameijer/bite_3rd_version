@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { get } from './itemServices';
+import { getItems } from './itemService';
 import { formatAsPrice, omit, toInternalCentPrices } from './utils';
+import { post } from './basketService'
 import Basket from './Basket';
 import { Link } from 'react-router-dom'
 
@@ -16,10 +17,16 @@ const Order = () => {
     }
 
     useEffect(() => {
-        get().then(response => response.json())
+        getItems().then(response => response.json())
             .then(actualData => setItems(toInternalCentPrices(actualData)))
             .catch(err => console.log(`An error has occurred: ${err.message}.`))
     }, []);
+
+    const order = () =>
+        post({ basketItems: Object.entries(basket).map(([itemId, count]) => ({ itemId, count })) }).then(() => {
+            alert("You have ordered!");
+            setBasket({})
+        });
 
     return <>
         <p>Order!</p>
@@ -30,6 +37,7 @@ const Order = () => {
                 <button onClick={() => removeFromBasket(item.id)}>Remove from basket!</button></li>)}
         </ol>
         <Basket items={items} basket={basket} />
+        <button onClick={order}>Order!</button>
 
     </>
     // note: <AddItem {...{reloadItems}} /> also works, but may be too unconventional for readability, {reloadItems} itself does NOT work
