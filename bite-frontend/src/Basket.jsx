@@ -8,11 +8,11 @@ const Basket = ({ items, basket }) => {
 
     return <>
         Your basket{Object.keys(basket).length === 0 ? " is empty" :
-            (<> 
-            :
-            <ul>
-                {orderLines.map(orderLine => <li key={orderLine}>{orderLine}</li>)}
-            </ul>
+            (<>
+                :
+                <ul>
+                    {orderLines.map(orderLine => <li key={orderLine}>{orderLine}</li>)}
+                </ul>
                 <p>TOTAL: {formatAsPrice(totalPrice)}</p>
             </>
             )
