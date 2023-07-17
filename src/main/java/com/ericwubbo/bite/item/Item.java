@@ -1,10 +1,13 @@
 package com.ericwubbo.bite.item;
 
+import com.ericwubbo.bite.tag.Tag;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Entity
 public class Item {
@@ -16,11 +19,15 @@ public class Item {
 
     private BigDecimal price;
 
+    @ManyToMany
+    private Set<Tag> tags;
+
     private Item() {}
 
-    public Item(String name, String price) {
+    public Item(String name, String price, Tag... tags) {
         this.name = name;
         this.price = new BigDecimal(price);
+        this.tags = Set.of(tags);
     }
 
     public Long getId() {
