@@ -15,38 +15,17 @@ import java.util.Set;
 @CrossOrigin
 @RequestMapping("api/v1/baskets")
 public class BasketController {
-
     @Autowired
-    private BasketRepository basketRepository;
-
-    @Autowired
-    private BasketItemRepository basketItemRepository;
-
-    @Autowired
-    private ItemRepository itemRepository;
+    private BasketService basketService;
 
     @GetMapping
     public Set<Basket> test() {
-        return basketRepository.findByDateTimeIsAfter(LocalDateTime.now().minusDays(1));
-    }
-
-    record BasketItemDto(long itemId, int count) {
-    }
-
-    record BasketDto(BasketItemDto[] basketItems) {
+        return basketService.getLastDaysBaskets();
     }
 
     @PostMapping
     public Basket post(@RequestBody BasketDto basketDto) {
-        var basket = basketRepository.save(new Basket());
-        // should likely do a precheck that all ids exist and all counts > 0
-        for (BasketItemDto basketItemDto : basketDto.basketItems()) {
-            Item item = itemRepository.findById(basketItemDto.itemId).orElseThrow();
-            BasketItem basketItem = new BasketItem(item, basket, basketItemDto.count);
-            basketItemRepository.save(basketItem);
-            basket.addBasketItem(basketItem);
-        }
-        return basket;
+        // note: should likely also make a basketDto.toBasket() method, but that would distract from the Service-discussion
+        return basketService.save(basketDto);
     }
-
 }
