@@ -51,7 +51,7 @@ public class Seeder implements CommandLineRunner {
         if (count == 0) {
             System.out.println("Seeding basket");
             Item apples = itemRepository.findByName("apples").stream().findFirst().get();
-            Item pears = itemRepository.findByName("pears").stream().findFirst().get();
+            Item pears = itemRepository.findByName("prunes").stream().findFirst().get();
             var basket = new Basket();
             BasketItem applesOrder = new BasketItem(apples, basket, 1);
             BasketItem pearsOrder = new BasketItem(pears, basket, 2);
