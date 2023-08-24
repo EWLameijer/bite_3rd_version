@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 const Order = () => {
     const [items, setItems] = useState([]);
     const [basket, setBasket] = useState({});
+    const [userName, setUserName] = useState("");
 
     const addToBasket = id => setBasket({ ...basket, [id]: (basket[id] ?? 0) + 1 });
 
@@ -28,9 +29,17 @@ const Order = () => {
             setBasket({})
         });
 
+
+
     return <>
-        <p>Order!</p>
-        <Link to="/manage">Manage the stocks...</Link>
+        <p>Order! {userName || "unknown user"}</p>
+        {userName ? <></> : <>
+            Please enter your name:
+            <input type="text"></input>
+            <button onClick= "submitName">OK</button>
+        </>
+        }
+        <p><Link to="/manage">Manage the stocks...</Link></p>
         <ol>
             {items.map(item => <li key={item.id}>{item.name} {formatAsPrice(item.price)}
                 <button onClick={() => addToBasket(item.id)}>Add to basket!</button>

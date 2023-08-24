@@ -13,6 +13,8 @@ public class Basket {
     @GeneratedValue
     private Long id;
 
+    private String userName;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "basket")
     // without mappedBy, creates a separate join table
     // IF basketItems is present, need @OneToMany
